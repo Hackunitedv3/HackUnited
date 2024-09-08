@@ -189,7 +189,7 @@ def main(directory):
             suggested_name = suggest_file_name_groq(content)
             print(f"Suggested new name: {suggested_name}")
             
-            # Step 4: Rename the file
+           
             rename_file(file_path, suggested_name)
 
 directory = "/path/to/your/directory"
