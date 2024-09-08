@@ -115,17 +115,17 @@ def list_untitled_files(directory):
                 untitled_files.append(file_path)
     return untitled_files
 
-# Function to read TXT files
+
 def read_txt(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
-# Function to read DOCX files
+
 def read_docx(file_path):
     doc = docx.Document(file_path)
     return "\n".join([para.text for para in doc.paragraphs])
 
-# Function to suggest a new file name using Groq Cloud API
+
 def suggest_file_name_groq(content):
     headers = {
         "Authorization": f"Bearer {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}",
@@ -133,7 +133,7 @@ def suggest_file_name_groq(content):
     }
     
     data = {
-        "text": content[:1000]  # Send only the first 1000 characters to avoid too long input
+        "text": content[:1000] 
     }
     
     response = requests.post(groq_endpoint, json=data, headers=headers)
@@ -145,19 +145,19 @@ def suggest_file_name_groq(content):
         print(f"Error: {response.status_code}, {response.text}")
         return None
 
-# Function to rename a file
+
 def rename_file(file_path, new_name):
     directory = os.path.dirname(file_path)
     extension = os.path.splitext(file_path)[1]
     new_path = os.path.join(directory, new_name + extension)
     
-    if not os.path.exists(new_path):  # Avoid overwriting files
+    if not os.path.exists(new_path):  
         os.rename(file_path, new_path)
         print(f"File renamed to: {new_path}")
     else:
         print(f"File with name {new_name} already exists.")
 
-# Function to extract content based on file type
+
 def extract_content(file_path):
     extension = os.path.splitext(file_path)[1].lower()
     if extension == ".txt":
@@ -168,32 +168,30 @@ def extract_content(file_path):
         print(f"Unsupported file type: {extension}")
         return None
 
-# Main function
+
 def main(directory):
-    # Step 1: Find untitled files
+  
     untitled_files = list_untitled_files(directory)
     
     if not untitled_files:
         print("No untitled files found.")
         return
     
-    # Step 2: Process each file
+  
     for file_path in untitled_files:
         print(f"\nProcessing file: {file_path}")
         
-        # Extract content from the file
+       
         content = extract_content(file_path)
         
         if content:
-            # Step 3: Get Groq AI suggestion for new file name
+          
             suggested_name = suggest_file_name_groq(content)
             print(f"Suggested new name: {suggested_name}")
             
             # Step 4: Rename the file
             rename_file(file_path, suggested_name)
 
-# Set the directory you want to scan
 directory = "/path/to/your/directory"
 
-# Run the program
 main(directory)
